@@ -9,12 +9,13 @@ const App = () => {
 
 
   const fetchPosts = async () => {
-    const { data } = await supabase.from('posts').select()
+    const { data } = await supabase.from('posts').select().order('id', { ascending: false })
     setPosts(data)
   }
 
   const createPost = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
+    
     try {
       await supabase.from('posts').insert([
         {title, context}
@@ -24,7 +25,15 @@ const App = () => {
     } catch (error) {
       console.log({error})
     }
+  }
 
+  const deletePost = async (id) => {
+      try {
+        await supabase.from('posts').delete().match({'id': id})
+        fetchPosts()
+      } catch (error) {
+        console.log({error})
+      }
   }
 
   useEffect(() => {
@@ -65,8 +74,13 @@ const App = () => {
                     <h2 className="card-title">{post.title}</h2> 
                     <p>{post.context}</p>
                   </div>
+                  <div className='flex mb-2'>
+                    <button className="mx-2 text-xs btn btn-neutral btn-sm">Editar</button> 
+                    <button onClick={() => deletePost(post.id)} class="btn text-xs btn-neutral btn-sm mx-2">Excluir</button>
+                  </div>
                 </div>   
               ))}
+              
         </div>
 
       </div>
