@@ -51,6 +51,11 @@ const App = () => {
       setPosts(posts)
       setEditPostState(null)
       setPost({ title: '', context: '' })
+
+      if(error){
+        console.log('Error:', error)
+        return
+      }
      
       
       return
